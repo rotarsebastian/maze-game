@@ -15,7 +15,7 @@ const Home = () => {
                 <h3>Description</h3>
                 <p>Pony challenge is a conding challenge in which the attendant has to build a maze game based on the data received from the Trustpilot API. 
                    The maze is built out from a set of data which consist of a matrix. A matrix has a given width and height - given by the user - and it is 
-                   created dinamically. After the user sets a pony name and a difficulty level the game begins
+                   created dinamically. After the user sets a pony name and a difficulty level the game begins.
                 </p>
 
 
