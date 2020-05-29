@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from '../Game.module.css';
 import { ReactComponent as Pony } from './../../../assets/img/pony-logo.svg';
 import { ReactComponent as Domokun } from './../../../assets/img/domokun.svg';
 import { ReactComponent as Exit } from './../../../assets/img/exit.svg';
@@ -20,7 +19,6 @@ const Flag = props => {
             height={props.distance / 2 + props.distance / 4} 
             width={props.distance / 2 + props.distance / 4}
             viewBox="0 0 64 64" 
-            className={classes.Pony}
         >
             {flag}
         </svg>

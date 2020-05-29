@@ -70,10 +70,12 @@ const Play = () => {
     const [ difficulty, setDifficulty ] = useState(1);
     const [ loadingButton, setLoadingButton ] = useState(false);
 
+    // ====================== GET EVERY OPTION FOR SELECT ======================
     const getMenuItems = (from, length) => 
         Array(length).fill('').map((item, index) => 
         <MenuItem key={from + index} value={from + index}>{from + index}</MenuItem>)
 
+    // ====================== CREATE A GAME ======================
     const handleStartGame = async() => {
         setLoadingButton(true);
         const requestObject = {
