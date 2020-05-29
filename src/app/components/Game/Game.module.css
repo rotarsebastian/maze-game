@@ -1,0 +1,72 @@
+
+.SvgWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.SvgElem {
+    max-height: 65vh;
+    width: 30rem;
+}
+
+.Numbers {
+    text-anchor: middle;
+    fill: var(--blue);
+}
+
+.Box {
+    fill: #e7eff3;
+    stroke: var(--purple);
+    transition: .3s;
+    stroke-width: 3px;
+}
+
+.ControlsInfo, .GameStatus, .LastMove {
+    text-align: center;
+    color: var(--grey);
+}
+
+.GameStatus, .LastMove {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 35rem;
+}
+
+.GameStatus {
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+    font-size: 1.115rem;
+}
+
+.ControlsInfo {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
+    font-size: 1.2rem;
+    margin: 0 auto;
+    font-family: 'Quicksand SemiBold';
+}
+
+.Loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.GameResults {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 50vh;
+}
+
+.GameResults h2 {
+    margin-bottom: .75rem;
+    color: var(--grey);
+    font-size: 2rem;
+}

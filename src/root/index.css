@@ -1,0 +1,103 @@
+/* GENERIC CSS - FOR THE WHOLE APP */
+
+@font-face {
+  font-family: 'Quicksand Regular';
+  src: url('../app/assets/fonts/Quicksand-Regular.ttf'); 
+}
+
+@font-face {
+  font-family: 'Quicksand Medium';
+  src: url('../app/assets/fonts/Quicksand-Medium.ttf'); 
+}
+
+@font-face {
+  font-family: 'Quicksand Light';
+  src: url('../app/assets/fonts/Quicksand-Light.ttf'); 
+}
+
+@font-face {
+  font-family: 'Quicksand Bold';
+  src: url('../app/assets/fonts/Quicksand-Bold.ttf'); 
+}
+
+@font-face {
+  font-family: 'Quicksand SemiBold';
+  src: url('../app/assets/fonts/Quicksand-SemiBold.ttf'); 
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Quicksand Medium', 'sans-serif';
+  -webkit-font-smoothing: antialiased;
+  color: var(--black);
+}
+
+label {
+  font-family: "Quicksand Regular", "sans-serif" !important;
+}
+
+input {
+  font-family: "Quicksand Medium", "sans-serif" !important;
+}
+
+::placeholder {
+  font-family: "Quicksand Regular", "sans-serif" !important;
+}
+
+#root {
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  outline: none;
+  border: none;
+}
+
+.PlayButton {
+  margin-top: 2rem;
+  margin-bottom: .5rem;
+  padding: .5rem 4rem;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 140% auto;
+  font-size: 1rem;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: var(--radius);
+  background-image: linear-gradient(45deg, var(--blue), var(--purple));
+  width: 13.5rem;
+}
+
+.PlayButton:hover {
+  background-position: right center; 
+}
+
+.Title {
+  font-size: 2rem;
+  margin: 2rem 1.5rem;
+  margin-top: .5rem;
+  background-color: var(--blue);
+  background-image: linear-gradient(45deg, var(--blue), var(--purple));
+  background-size: 100%;
+  background-repeat: repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+}
+
+
+
+

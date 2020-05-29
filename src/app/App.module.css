@@ -1,0 +1,13 @@
+:root {
+  --black: #222;
+  --grey: rgb(119, 119, 119);
+  --hover-black: #2c225508; 
+  --blue: #289eda;
+  --purple: #9c31fe;
+  --radius: .6rem;
+  --box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.14);
+}
+
+.Root {
+  padding: 7.4rem 5rem;
+}

@@ -1,0 +1,46 @@
+.PlayContainer {
+    box-shadow: var(--box-shadow);
+    border-radius: var(--radius);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.PlayContainer .Title {
+    font-size: 2rem;
+    margin: 2rem 1.5rem;
+    margin-top: .5rem;
+    background-color: var(--blue);
+    background-image: linear-gradient(45deg, var(--blue), var(--purple));
+    background-size: 100%;
+    background-repeat: repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-background-clip: text;
+    -moz-text-fill-color: transparent;
+}
+
+.PlayContainer .Label {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--blue);
+}
+
+.PlayContainer .Label.First {
+    margin-top: 0;
+}
+
+.PlayContainer .DimensionsContainer {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.PlayContainer .RadioContainer {
+    flex-direction: row;
+}
+

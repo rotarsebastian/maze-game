@@ -1,0 +1,22 @@
+.HomeContainer {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.HomeContainer h3 {
+    color: var(--blue);
+    font-size: 1.3rem;
+    font-family: 'Quicksand SemiBold';
+    margin-bottom: 1.5rem;
+    margin-top: 1.3rem;
+}
+
+.HomeContainer p {
+    color: var(--grey);
+    font-size: 1rem;
+    margin: 0 17vw;
+    text-align: center;
+    line-height: 1.75;
+}

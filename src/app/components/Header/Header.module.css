@@ -1,0 +1,59 @@
+.HeaderContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .6rem 5rem;
+    position: fixed;
+    z-index: 100;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+.HeaderContainer .Logo {
+    width: 2.75rem;
+    transition: .3s;
+}
+
+.HeaderContainer .Logo:hover {
+    filter: brightness(1.4);
+    transform: scale(1.03);
+}
+
+.HeaderContainer .NavbarRight .Button {
+    font-family: 'Quicksand Bold', 'sans-serif';
+    cursor: pointer;
+    padding: .75rem 1rem;
+    border-radius: 5rem;
+    transition: .3s;
+    margin: 0 -.15rem;
+    font-size: .95rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+    height: 2.5rem;
+}
+
+.HeaderContainer .NavbarRight .Button:hover {
+    background-color: var(--hover-black);
+}
+
+.HeaderContainer .NavbarRight {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.HeaderContainer .NavbarRight a {
+    text-decoration: none;
+}
+
+.HeaderContainer .NavbarRight a span {
+    color: var(--grey);
+}
+
+.HeaderContainer .NavbarRight a.active span {
+    color: var(--blue);
+}
+
