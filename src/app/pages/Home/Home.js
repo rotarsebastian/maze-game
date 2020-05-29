@@ -23,8 +23,8 @@ const Home = () => {
                 <p>After finding a valid pony name I realised that this challenge implies not only a coding challenge, but also a matter of daily basis situation.
                    I started to like it, I like to call myself a problem solver.<br /><br />
                    After carefully analyzing the data format and the final maze print I have decided
-                   that I want to create the maze as an SVG. I choosed SVG because I have built something similar before, but in plain JavaScript. This time I 
-                   wanted to use React. Not only because it is one of my favorite frameworks, but also because it is the thing I used the most the latest months 
+                   that I want to create the maze as an SVG. I chose SVG because I have built something similar before, but in plain JavaScript. This time I 
+                   decided to use React. Not only because it is one of my favorite frameworks, but also because it is the thing I used the most the latest months 
                    and I want to get better with it.<br /><br />
                    My solution is similar to the legendary Pac-Man excepts that you have full control of your next moves, there is only one monster and you don't 
                    need to eat anything, just to escape. 
