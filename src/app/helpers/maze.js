@@ -6,41 +6,34 @@ export const getBorders = (borders, x, y, width, distance) => {
     const element = borders[width * y + x];
     const nextElement = borders[width * y + x + 1];
     const bottomElement = borders[width * (y + 1) + x];
-    const prevElement = borders[width * y + x - 1];
 
-    let elementString = element.toString();
+    let elementString = element.toString(); 
 
+    // ====================== ADD RIGHT BORDER IF NEXT ELEMENT HAS WEST ======================
     if(nextElement) {
-        if(nextElement % width !== 0) {
-            if(nextElement.indexOf('west') >= 0) {
-                if(elementString.length > 0) elementString += ',east';
-                    else elementString += 'east';
-            }
+        if(nextElement.indexOf('west') >= 0) {
+            if(elementString.length > 0) elementString += ',east';
+                else elementString += 'east';
         }
-    } else {
-        if(elementString.length > 0) elementString += ',east';
-            else elementString += 'east';
-    }
+    } 
+    
+    // ====================== HANDLE LAST MATRIX ELEMENT ======================
+    else if(elementString.length > 0) elementString += ',east';
+    else elementString += 'east';
 
+    // ====================== ADD BOTTOM BORDER IF ELEMENT ON BOTTOM HAS NORTH ======================
     if(bottomElement) {
         if(bottomElement.indexOf('north') >= 0) {
             if(elementString.length > 0) elementString += ',south';
                 else elementString += 'south';
         }
-    } else {
-        if(elementString.length > 0) elementString += ',south';
-            else elementString += 'south';
     }
 
-    if(element.indexOf('west') === -1 && prevElement) {
-        if(prevElement % width !== 0) {
-            if(prevElement.indexOf('east') >= 0) {
-                if(elementString.length > 0) elementString += ',west';
-                    else elementString += 'west';
-            }
-        }
-    }
+    // ====================== HANDLE LAST MATRIX ROW ====================== 
+    else if(elementString.length > 0) elementString += ',south';
+    else elementString += 'south';
 
+    // ====================== HANDLE ELEMENT WITH NO BORDERS ====================== 
     if(elementString.length === 0) elementString += 'none';
 
     // ====================== RETURN BOX STYLES ======================
