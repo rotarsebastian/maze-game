@@ -1,6 +1,6 @@
 
 // ====================== GET BOX BORDERS ======================
-export const getBorders = (borders, x, y, width, distance) => {
+export const addBoxBorders = (borders, x, y, width, distance) => {
 
     // ====================== ELEMENT AND NEIGHBOURS ======================
     const element = borders[width * y + x];

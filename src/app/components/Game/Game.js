@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMaze, movePony } from './../../api/api';
 import classes from './Game.module.css';
-import { getBorders } from './../../helpers/maze';
+import { addBoxBorders } from './../../helpers/maze';
 import useEventListener from '@use-it/event-listener';
 import { useHistory } from 'react-router-dom';
 import Coordinates from './GameParts/Coordinates';
@@ -23,16 +23,92 @@ const Game = ({ id: mazeId }) => {
 
     // ====================== WHOLE MAZE DATA ======================
     const [ mazeData, setMazeData ] = useState(undefined);
+    const [ squareBoxes, setSquareBoxes ] = useState(undefined);
+    const [ ponyAndDomokun, setPonyAndDomokun ] = useState(undefined);
+    const [ exit, setExit ] = useState(undefined);
     
     // ====================== FETCH INITIAL DATA ======================
     useEffect(() => {
         const fetchMaze = async() => {
             const response = await getMaze(mazeId);
-            if(response.status === 1) setMazeData(response.data);
+            if(response.status === 1) {
+                setMazeData(response.data);
+                createMaze(response.data);
+            }
         }
 
         if(!mazeData) fetchMaze();
-    }, [mazeData, mazeId, setMazeData]); 
+    }); 
+
+    const createMaze = mazeData => {
+
+        const { size, data: borders, pony, domokun, 'end-point': exit } = mazeData;
+        
+        const boxes = [], ponyAndDomokun = [];
+        const [ width, height ] = size;
+
+        // ====================== ADD EVERY BOX FOR EVERY COLUMN ======================
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+
+                // ====================== ADD BOXES WITH BORDERS ======================
+                boxes.push(
+                    <SqureBox 
+                        key={`box_${x}_${y}`}
+                        borders={addBoxBorders(borders, x, y, width, distance)}
+                        x={x} 
+                        y={y} 
+                        start={start - ( distance / 2 )} 
+                        distance={distance}
+                        width={width} 
+                    />
+                );
+
+                // ====================== ADD PONY ======================
+                if(width * y + x === pony[0]) { 
+                    ponyAndDomokun.push(
+                        <Flag 
+                            key={`flag_${x}_${y}`}
+                            x={x} 
+                            y={y}
+                            start={start - ( distance / 2 )} 
+                            distance={distance}
+                            flag={'Pony'}
+                        />
+                    );
+                } 
+                
+                // ====================== ADD DOMOKUN ======================
+                else if (width * y + x === domokun[0]) {
+                    ponyAndDomokun.push(
+                        <Flag 
+                            key={`flag_${x}_${y}`}
+                            x={x} 
+                            y={y}
+                            start={start - ( distance / 2 )} 
+                            distance={distance}
+                            flag={'Domokun'}
+                        />
+                    );
+                } 
+                
+                // ====================== ADD EXIT ======================
+                else if (width * y + x === exit[0]) {
+                    setExit(<Flag 
+                        key={`flag_${x}_${y}`}
+                        x={x} 
+                        y={y}
+                        start={start - ( distance / 2 )} 
+                        distance={distance}
+                        flag={'Exit'}
+                    />);
+                } 
+            }
+        }
+
+        setSquareBoxes(boxes);
+        setPonyAndDomokun(ponyAndDomokun);
+    }
 
     // ====================== UPDATE PONY POSITION ======================
     const handleMovePony = async({ key }) => {
@@ -57,12 +133,43 @@ const Game = ({ id: mazeId }) => {
                 if(updatedMaze.status === 1) {
 
                     // ====================== UPDATE POSITIONS AND GAME STATE ======================
-                    setMazeData({ 
-                        ...mazeData, 
-                        pony: updatedMaze.data.pony, 
-                        domokun: updatedMaze.data.domokun,
-                        'game-state': updatedMaze.data['game-state']
-                    });
+
+                    const ponyNewPosition = updatedMaze.data.pony[0];
+                    const domokunNewPosition = updatedMaze.data.domokun[0];
+
+                    const [ width ] = mazeData.size;
+
+                    const newPonyY = Math.floor(ponyNewPosition / width);
+                    const newPonyX = ponyNewPosition % width;
+
+                    const newDomokunY = Math.floor(domokunNewPosition / width);
+                    const newDoomokunX = domokunNewPosition % width;
+
+                    const ponyAndDomokunData = [ 
+                        {
+                            name: 'Pony',
+                            x: newPonyX,
+                            y: newPonyY,
+                        },
+                        {
+                            name: 'Domokun',
+                            x: newDoomokunX,
+                            y: newDomokunY,
+                        } 
+                    ];
+
+                    const newPonyAndDomokun = ponyAndDomokunData.map(flag => 
+                        <Flag 
+                            key={`flag_${flag.x}_${flag.y}`}
+                            x={flag.x} 
+                            y={flag.y}
+                            start={start - ( distance / 2 )} 
+                            distance={distance}
+                            flag={flag.name}
+                        />
+                    );
+
+                    setPonyAndDomokun(newPonyAndDomokun);
                 }
             }
         }
@@ -74,7 +181,8 @@ const Game = ({ id: mazeId }) => {
     if(mazeData === undefined) return <div className={classes.Loading}><ClipLoader size={50} color={'#289eda'} /></div>
 
     // ====================== DATA LOADED - SPLIT DATA INTO SECTIONS ======================
-    const { size, data: borders, pony, domokun, 'end-point': exit, 'game-state': gameStatus } = mazeData;
+    const { size, 'game-state': gameStatus } = mazeData;
+    const [ width, height ] = size;
 
     // ====================== SHOW GAME RESULTS - IF GAME IS OVER ======================
     if(gameStatus.state === 'over' || gameStatus.state === 'won') return (
@@ -84,70 +192,6 @@ const Game = ({ id: mazeId }) => {
         </div>
     )
     
-    const squareBoxes = [], flags = []; 
-    const [ width, height ] = size;
-
-    // ====================== ADD EVERY BOX FOR EVERY COLUMN ======================
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-
-            // ====================== ADD BOXES WITH BORDERS ======================
-            squareBoxes.push(
-                <SqureBox 
-                    key={`box_${x}_${y}`}
-                    borders={getBorders(borders, x, y, width, distance)}
-                    x={x} 
-                    y={y} 
-                    start={start - ( distance / 2 )} 
-                    distance={distance}
-                    width={width} 
-                />
-            );
-
-            // ====================== ADD PONY ======================
-            if(width * y + x === pony[0]) { 
-                flags.push(
-                    <Flag 
-                        key={`flag_${x}_${y}`}
-                        x={x} 
-                        y={y}
-                        start={start - ( distance / 2 )} 
-                        distance={distance}
-                        flag={'Pony'}
-                    />
-                )
-            } 
-            
-            // ====================== ADD DOMOKUN ======================
-            else if (width * y + x === domokun[0]) {
-                flags.push(
-                    <Flag 
-                        key={`flag_${x}_${y}`}
-                        x={x} 
-                        y={y}
-                        start={start - ( distance / 2 )} 
-                        distance={distance}
-                        flag={'Domokun'}
-                    />
-                )
-            } 
-            
-            // ====================== ADD EXIT ======================
-            else if (width * y + x === exit[0]) {
-                flags.push(
-                    <Flag 
-                        key={`flag_${x}_${y}`}
-                        x={x} 
-                        y={y}
-                        start={start - ( distance / 2 )} 
-                        distance={distance}
-                        flag={'Exit'}
-                    />
-                )
-            } 
-        }
-    }
-
     // ====================== ADD X COORDINATES ======================
     const coordinatesX = Array.from(new Array(width), (el, index) => {
         return (
@@ -195,7 +239,8 @@ const Game = ({ id: mazeId }) => {
                     { coordinatesX }
                     { coordinatesY }
                     { squareBoxes }
-                    { flags }
+                    { exit }
+                    { ponyAndDomokun }
                 </svg>
             </div>
             <GameStatus status={gameStatus} />
