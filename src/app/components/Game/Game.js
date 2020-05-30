@@ -7,9 +7,15 @@ import { useHistory } from 'react-router-dom';
 import Coordinates from './GameParts/Coordinates';
 import Flag from './GameParts/Flag';
 import SqureBox from './GameParts/SquareBox';
+import GameStatus from './GameParts/GameStatus';
 import ClipLoader from 'react-spinners/ClipLoader';
 
+// ====================== REGISTERED KEYS ======================
 const escapeKeys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 's'];
+
+// ====================== SVG DISTANCE BETWEEN BOXES AND STARTING POINT ======================
+const distance = 35;
+const start = 50;
 
 const Game = ({ id: mazeId }) => {
 
@@ -17,10 +23,6 @@ const Game = ({ id: mazeId }) => {
 
     // ====================== WHOLE MAZE DATA ======================
     const [ mazeData, setMazeData ] = useState(undefined);
-
-    // ====================== SVG SIZE, SVG DISTANCE BETWEEN BOXES AND STARTING POINT ======================
-    const [ distance ] = useState(35);
-    const [ start ] = useState(50); 
     
     // ====================== FETCH INITIAL DATA ======================
     useEffect(() => {
@@ -32,14 +34,13 @@ const Game = ({ id: mazeId }) => {
         if(!mazeData) fetchMaze();
     }, [mazeData, mazeId, setMazeData]); 
 
-    // ====================== CAPITALIZE WORD ======================
-    const capitalize = text => text.charAt(0).toUpperCase() + text.slice(1);
-
     // ====================== UPDATE PONY POSITION ======================
     const handleMovePony = async({ key }) => {
 
         // ====================== GET PRESSED KEY ======================
-        if (escapeKeys.includes(String(key))) {
+        if (escapeKeys.includes(key)) {
+
+            // ====================== ASSIGN DIRECTION BASED ON THE PRESSED KEY ======================
             let direction;
             if(key === 'ArrowUp') direction = 'north';
             else if(key === 'ArrowRight') direction = 'east';
@@ -47,11 +48,15 @@ const Game = ({ id: mazeId }) => {
             else if(key === 'ArrowLeft') direction = 'west';
             else if(key === 's') direction = 'stay';
 
-            // `east, west, north, south or stay`
+            // ====================== MAKE REQUEST TO MOVE PONY ======================
             const result = await movePony(mazeId, { direction });
             if(result.status === 1) {
+
+                // ====================== GET THE NEW MAZE DATA ======================
                 const updatedMaze = await getMaze(mazeId);
                 if(updatedMaze.status === 1) {
+
+                    // ====================== UPDATE POSITIONS AND GAME STATE ======================
                     setMazeData({ 
                         ...mazeData, 
                         pony: updatedMaze.data.pony, 
@@ -71,6 +76,7 @@ const Game = ({ id: mazeId }) => {
     // ====================== DATA LOADED - SPLIT DATA INTO SECTIONS ======================
     const { size, data: borders, pony, domokun, 'end-point': exit, 'game-state': gameStatus } = mazeData;
 
+    // ====================== SHOW GAME RESULTS - IF GAME IS OVER ======================
     if(gameStatus.state === 'over' || gameStatus.state === 'won') return (
         <div className={classes.GameResults}>
             <h2>Result: { gameStatus['state-result'] }</h2>
@@ -107,7 +113,7 @@ const Game = ({ id: mazeId }) => {
                         y={y}
                         start={start - ( distance / 2 )} 
                         distance={distance}
-                        flag={'pony'}
+                        flag={'Pony'}
                     />
                 )
             } 
@@ -121,7 +127,7 @@ const Game = ({ id: mazeId }) => {
                         y={y}
                         start={start - ( distance / 2 )} 
                         distance={distance}
-                        flag={'D'}
+                        flag={'Domokun'}
                     />
                 )
             } 
@@ -135,11 +141,10 @@ const Game = ({ id: mazeId }) => {
                         y={y}
                         start={start - ( distance / 2 )} 
                         distance={distance}
-                        flag={'E'}
+                        flag={'Exit'}
                     />
                 )
-            }
-            
+            } 
         }
     }
 
@@ -193,20 +198,7 @@ const Game = ({ id: mazeId }) => {
                     { flags }
                 </svg>
             </div>
-
-            <div className={classes.GameStatus}>
-                Game status:
-                <b>{ capitalize(gameStatus.state) }</b>
-            </div>
-
-            <div className={classes.LastMove}>
-                Last move result: 
-                <b>{ gameStatus['state-result'] }</b>
-            </div>
-
-            <div className={classes.ControlsInfo}>
-                Use keyboard <b>arrows</b> to move the poney and <b>S</b> key to stay on the same spot (Domokun will still chase you)
-            </div>
+            <GameStatus status={gameStatus} />
         </React.Fragment>
     )
 }

@@ -7,9 +7,9 @@ const Flag = props => {
 
     let flag;
     
-    if(props.flag === 'pony') flag = <Pony />;
-    if(props.flag === 'D') flag = <Domokun />;
-    if(props.flag === 'E') flag = <Exit />;
+    if(props.flag === 'Pony') flag = <Pony />;
+    if(props.flag === 'Domokun') flag = <Domokun />;
+    if(props.flag === 'Exit') flag = <Exit />;
 
     // ====================== ADD EXIT AND DOMOKUN ======================
     return (

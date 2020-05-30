@@ -16,7 +16,7 @@ export const getBorders = (borders, x, y, width, distance) => {
                 else elementString += 'east';
         }
     } 
-    
+
     // ====================== HANDLE LAST MATRIX ELEMENT ======================
     else if(elementString.length > 0) elementString += ',east';
     else elementString += 'east';
