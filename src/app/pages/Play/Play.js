@@ -78,11 +78,12 @@ const Play = () => {
     // ====================== CREATE A GAME ======================
     const handleStartGame = async() => {
         setLoadingButton(true);
+        
         const requestObject = {
             'maze-width': dimensions[0],
             'maze-height': dimensions[1],
             'maze-player-name': ponyName,
-            'difficulty': difficulty
+            difficulty
         }
         
         const response = await createMaze(requestObject);

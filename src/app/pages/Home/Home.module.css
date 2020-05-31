@@ -5,18 +5,28 @@
     flex-direction: column;
 }
 
+.HomeContainer h1 {
+    font-family: 'Quicksand SemiBold';
+}
+
 .HomeContainer h3 {
     color: var(--blue);
     font-size: 1.3rem;
     font-family: 'Quicksand SemiBold';
     margin-bottom: 1.5rem;
     margin-top: 1.3rem;
+    text-align: center;
 }
 
 .HomeContainer p {
     color: var(--grey);
     font-size: 1rem;
-    margin: 0 17vw;
+    margin: 0 23vw;
     text-align: center;
     line-height: 1.75;
+}
+
+.HomeContainer .TextScrollContainer {
+    overflow-y: scroll;
+    height: 65vh;
 }

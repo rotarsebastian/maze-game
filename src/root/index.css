@@ -99,5 +99,33 @@ button {
 }
 
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 25px;
+  background: transparent !important;
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #fff;
+  width: 4px;
+
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(119, 119, 119, 0.133) !important; 
+  border-radius: 10px;
+}
+
+
 
 

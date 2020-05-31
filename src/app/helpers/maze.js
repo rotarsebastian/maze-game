@@ -1,3 +1,10 @@
+import React from 'react';
+import Flag from './../components/Game/GameParts/Flag';
+import SqureBox from './../components/Game/GameParts/SquareBox';
+import { getMaze, movePony } from './../api/api';
+
+// ====================== REGISTERED KEYS ======================
+const escapeKeys = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 's'];
 
 // ====================== GET BOX BORDERS ======================
 export const addBoxBorders = (borders, x, y, width, distance) => {
@@ -73,3 +80,140 @@ export const addBoxBorders = (borders, x, y, width, distance) => {
     }
     
 };
+
+// ====================== CREATE INITIAL MAZE ======================
+export const createMaze = (mazeData, start, distance) => {
+    const { size, data: borders, pony, domokun, 'end-point': exit } = mazeData;
+        
+    const matrixBoxes = [], ponyAndDomokun = [];
+    const [ width, height ] = size;
+
+    let exitFlag;
+
+    // ====================== ADD EVERY BOX FOR EVERY COLUMN ======================
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+
+            // ====================== ADD BOXES WITH BORDERS ======================
+            matrixBoxes.push(
+                <SqureBox 
+                    key={`box_${x}_${y}`}
+                    borders={addBoxBorders(borders, x, y, width, distance)}
+                    x={x} 
+                    y={y} 
+                    start={start - ( distance / 2 )} 
+                    distance={distance}
+                    width={width} 
+                />
+            );
+
+            // ====================== ADD PONY ======================
+            if(width * y + x === pony[0]) { 
+                ponyAndDomokun.push(
+                    <Flag 
+                        key={`flag_${x}_${y}`}
+                        x={x} 
+                        y={y}
+                        start={start - ( distance / 2 )} 
+                        distance={distance}
+                        flag={'Pony'}
+                    />
+                );
+            } 
+            
+            // ====================== ADD DOMOKUN ======================
+            else if (width * y + x === domokun[0]) {
+                ponyAndDomokun.push(
+                    <Flag 
+                        key={`flag_${x}_${y}`}
+                        x={x} 
+                        y={y}
+                        start={start - ( distance / 2 )} 
+                        distance={distance}
+                        flag={'Domokun'}
+                    />
+                );
+            } 
+            
+            // ====================== ADD EXIT ======================
+            else if (width * y + x === exit[0]) {
+                exitFlag = <Flag 
+                    key={`flag_${x}_${y}`}
+                    x={x} 
+                    y={y}
+                    start={start - ( distance / 2 )} 
+                    distance={distance}
+                    flag={'Exit'}
+                />;
+            } 
+        }
+    }
+
+    return { matrixBoxes, ponyAndDomokun, exitFlag };
+}
+
+// ====================== UPDATE MAZE DATA ======================
+export const updateMaze = async(key, mazeId, width, start, distance) => {
+
+    // ====================== GET PRESSED KEY ======================
+    if (escapeKeys.includes(key)) {
+
+        // ====================== ASSIGN DIRECTION BASED ON THE PRESSED KEY ======================
+        let direction;
+        if(key === 'ArrowUp') direction = 'north';
+        else if(key === 'ArrowRight') direction = 'east';
+        else if(key === 'ArrowDown') direction = 'south';
+        else if(key === 'ArrowLeft') direction = 'west';
+        else if(key === 's') direction = 'stay';
+
+        // ====================== MAKE REQUEST TO MOVE PONY ======================
+        const result = await movePony(mazeId, { direction });
+        if(result.status === 1) {
+
+            // ====================== GET THE NEW MAZE DATA ======================
+            const updatedMaze = await getMaze(mazeId);
+            if(updatedMaze.status === 1) {
+
+                // ====================== GET THE NEW POSITIONS FOR PONY AND DOMOKUN ======================
+                const ponyNewPosition = updatedMaze.data.pony[0];
+                const domokunNewPosition = updatedMaze.data.domokun[0];
+
+                // ====================== CALCULATE THE NEW X AND Y ======================
+                const newPonyY = Math.floor(ponyNewPosition / width);
+                const newPonyX = ponyNewPosition % width;
+
+                const newDomokunY = Math.floor(domokunNewPosition / width);
+                const newDoomokunX = domokunNewPosition % width;
+
+                // ====================== CREATE NEW PONY AND DOMOKUN DATA ======================
+                const ponyAndDomokunData = [ 
+                    {
+                        name: 'Pony',
+                        x: newPonyX,
+                        y: newPonyY,
+                    },
+                    {
+                        name: 'Domokun',
+                        x: newDoomokunX,
+                        y: newDomokunY,
+                    } 
+                ];
+
+                // ====================== CREATE THE COMPONENTS ARRAY ======================
+                const newPonyAndDomokun = ponyAndDomokunData.map(flag => 
+                    <Flag 
+                        key={`flag_${flag.x}_${flag.y}`}
+                        x={flag.x} 
+                        y={flag.y}
+                        start={start - ( distance / 2 )} 
+                        distance={distance}
+                        flag={flag.name}
+                    />
+                );
+
+                // ====================== RETURN NEW DATA BACK ======================
+                return { status: 1, newPonyAndDomokun, gameStatus: updatedMaze.data['game-state'] };
+            }
+        }
+    } else return { status: 0 }; // RETURN 0 IF ANY OTHER KEY IS PRESSED
+}

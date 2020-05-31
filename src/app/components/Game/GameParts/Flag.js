@@ -8,10 +8,10 @@ const Flag = props => {
     let flag;
     
     if(props.flag === 'Pony') flag = <Pony />;
-    if(props.flag === 'Domokun') flag = <Domokun />;
-    if(props.flag === 'Exit') flag = <Exit />;
+    else if(props.flag === 'Domokun') flag = <Domokun />;
+    else if(props.flag === 'Exit') flag = <Exit />;
 
-    // ====================== ADD EXIT AND DOMOKUN ======================
+    // ====================== ADD FLAG ICON ======================
     return (
         <svg 
             x={props.start + props.x * props.distance + props.distance / 7} 
