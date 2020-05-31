@@ -15,7 +15,7 @@ const start = 50;
 const Game = ({ id: mazeId }) => {
 
     // ====================== STATE VALUES ======================
-    const [ mazeData, setMazeData ] = useState(undefined);
+    const [ sizes, setSizes ] = useState(undefined);
     const [ gameStatus, setGameStatus ] = useState(undefined);
     const [ exit, setExit ] = useState(undefined);
     const [ matrixBoxes, setMatrixBoxes ] = useState(undefined);
@@ -27,21 +27,22 @@ const Game = ({ id: mazeId }) => {
         const fetchMaze = async() => {
             const response = await getMaze(mazeId);
             if(response.status === 1) {
-                initializeMaze(response.data);
-                setMazeData(response.data);
+                const { size, 'game-state': gameStatus} = response.mazeData;
+                setSizes(size);
+                setGameStatus(gameStatus);
+                initializeMaze(response.mazeData);
                 setIsLoaded(true);
             }
         }
 
         // ====================== LOAD INITIAL DATA ======================
-        if(!mazeData) fetchMaze();
+        if(!sizes) fetchMaze();
     }); 
 
     // ====================== GET INITIAL DATA - SET MAZE ======================
     const initializeMaze = mazeData => {
         const mazeElements = createMaze(mazeData, start, distance);
 
-        setGameStatus(mazeData['game-state']);
         setExit(mazeElements.exitFlag);
         setMatrixBoxes(mazeElements.matrixBoxes);
         setPonyAndDomokun(mazeElements.ponyAndDomokun);
@@ -61,7 +62,8 @@ const Game = ({ id: mazeId }) => {
 
     // ====================== UPDATE MAZE ======================
     const handleUpdateMaze = async({ key }) => {
-        const updatedMaze = await updateMaze(key, mazeId, mazeData.size[0], start, distance);
+        const [ width ] = sizes;
+        const updatedMaze = await updateMaze(key, mazeId, width, start, distance);
 
         if(updatedMaze.status === 1) {
             setGameStatus(updatedMaze.gameStatus);
@@ -79,8 +81,7 @@ const Game = ({ id: mazeId }) => {
     if(gameStatus.state === 'over' || gameStatus.state === 'won') return <GameResults status={gameStatus} />
 
     // ====================== DATA LOADED - GET WIDTH AND HEIGHT ======================
-    const { size } = mazeData;
-    const [ width, height ] = size;
+    const [ width, height ] = sizes;
 
     // ====================== SVG VIEWBOX ENDPOINTS ======================
     const viewBox = getSvgViewBox(width, height);

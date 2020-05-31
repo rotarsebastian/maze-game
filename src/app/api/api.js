@@ -31,16 +31,16 @@ export const getMaze = async(id) => {
           }
         };
         const response = await fetch(endpoint + `/${id}`, options);
-        const data = await response.json();
+        const mazeData = await response.json();
 
-        return { status: 1, data };;
+        return { status: 1, mazeData };
     }
     catch(err) {
       return { status: 0, message: 'Can not connect to the API' };
     }
 };
 
-// ====================== MOVE PONY ONE BOX ======================
+// ====================== REQUEST PONY NEW POSITION ======================
 export const movePony = async(id, direction) => {
   try {
       const options = {
@@ -52,9 +52,9 @@ export const movePony = async(id, direction) => {
         body: JSON.stringify(direction)
       };
       const response = await fetch(endpoint + `/${id}`, options);
-      const data = await response.json();
+      const newGameStatus = await response.json();
 
-      return { status: 1, data };
+      return { status: 1, newGameStatus };
   }
   catch(err) {
     return { status: 0, message: 'Can not connect to the API' };

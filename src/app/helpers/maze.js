@@ -23,7 +23,6 @@ export const addBoxBorders = (borders, x, y, width, distance) => {
                 else elementString += 'east';
         }
     } 
-
     // ====================== HANDLE LAST MATRIX ELEMENT ======================
     else if(elementString.length > 0) elementString += ',east';
     else elementString += 'east';
@@ -94,7 +93,7 @@ export const createMaze = (mazeData, start, distance) => {
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
 
-            // ====================== ADD BOXES WITH BORDERS ======================
+            // ====================== ADD MATRIX BOXES WITH BORDERS ======================
             matrixBoxes.push(
                 <SqureBox 
                     key={`box_${x}_${y}`}
@@ -167,23 +166,27 @@ export const updateMaze = async(key, mazeId, width, start, distance) => {
         else if(key === 's') direction = 'stay';
 
         // ====================== MAKE REQUEST TO MOVE PONY ======================
-        const result = await movePony(mazeId, { direction });
-        if(result.status === 1) {
+        const response = await movePony(mazeId, { direction });
+        if(response.status === 1) {
 
-            // ====================== GET THE NEW MAZE DATA ======================
+            // ====================== GET THE NEW MAZE DATA ====================== 
+            // ====================== NEEDED TO UPDATE DOMOKUN POSITION - ONLY SERVER KNOWS THE NEW DOMOKUN POSITION 
             const updatedMaze = await getMaze(mazeId);
             if(updatedMaze.status === 1) {
 
+                // ====================== DESTRUCTURE NEW MAZE DATA INTO PARTS ======================
+                const { pony, domokun, 'game-state': gameStatus } = updatedMaze.mazeData;
+
                 // ====================== GET THE NEW POSITIONS FOR PONY AND DOMOKUN ======================
-                const ponyNewPosition = updatedMaze.data.pony[0];
-                const domokunNewPosition = updatedMaze.data.domokun[0];
+                const ponyNewPosition = pony[0];
+                const domokunNewPosition = domokun[0];
 
                 // ====================== CALCULATE THE NEW X AND Y ======================
                 const newPonyY = Math.floor(ponyNewPosition / width);
                 const newPonyX = ponyNewPosition % width;
 
                 const newDomokunY = Math.floor(domokunNewPosition / width);
-                const newDoomokunX = domokunNewPosition % width;
+                const newDomokunX = domokunNewPosition % width;
 
                 // ====================== CREATE NEW PONY AND DOMOKUN DATA ======================
                 const ponyAndDomokunData = [ 
@@ -194,7 +197,7 @@ export const updateMaze = async(key, mazeId, width, start, distance) => {
                     },
                     {
                         name: 'Domokun',
-                        x: newDoomokunX,
+                        x: newDomokunX,
                         y: newDomokunY,
                     } 
                 ];
@@ -212,7 +215,7 @@ export const updateMaze = async(key, mazeId, width, start, distance) => {
                 );
 
                 // ====================== RETURN NEW DATA BACK ======================
-                return { status: 1, newPonyAndDomokun, gameStatus: updatedMaze.data['game-state'] };
+                return { status: 1, newPonyAndDomokun, gameStatus };
             }
         }
     } else return { status: 0 }; // RETURN 0 IF ANY OTHER KEY IS PRESSED

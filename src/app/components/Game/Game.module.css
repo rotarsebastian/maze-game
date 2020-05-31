@@ -7,7 +7,7 @@
 
 .SvgElem {
     max-height: 65vh;
-    width: 35rem;
+    width: 38rem;
 }
 
 .Numbers {
@@ -35,7 +35,7 @@
 }
 
 .GameStatus {
-    margin-top: 4rem;
+    margin-top: 2.5rem;
     margin-bottom: 1rem;
     font-size: 1.115rem;
 }

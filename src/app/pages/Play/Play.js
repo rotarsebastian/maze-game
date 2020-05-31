@@ -79,14 +79,14 @@ const Play = () => {
     const handleStartGame = async() => {
         setLoadingButton(true);
         
-        const requestObject = {
+        const gameData = {
             'maze-width': dimensions[0],
             'maze-height': dimensions[1],
             'maze-player-name': ponyName,
             difficulty
         }
         
-        const response = await createMaze(requestObject);
+        const response = await createMaze(gameData);
         setLoadingButton(false);
 
         if(response.status  === 1) history.push(`/play/${response.data.maze_id}`);
@@ -146,7 +146,12 @@ const Play = () => {
                 </Select>
 
                 {/* ====================== PLAY ====================== */}
-                <button className="PlayButton" type="button" onClick={handleStartGame} disabled={loadingButton}>
+                <button 
+                    className="PlayButton" 
+                    type="button" 
+                    onClick={handleStartGame} 
+                    disabled={loadingButton}
+                >
                     { loadingButton ? <ClipLoader size={15} color={'#fff'} /> : 'Play' }
                 </button>
 
