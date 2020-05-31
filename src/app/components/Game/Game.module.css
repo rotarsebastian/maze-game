@@ -70,3 +70,9 @@
     color: var(--grey);
     font-size: 2rem;
 }
+
+@media only screen and (max-height: 830px) {
+    .SvgElem {
+        width: 27rem;
+    }
+}
