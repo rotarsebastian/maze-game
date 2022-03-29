@@ -1,4 +1,4 @@
-## Trustpilot Pony Challenge
+## Pony Challenge
 
 To run this project run this simple command:
 
